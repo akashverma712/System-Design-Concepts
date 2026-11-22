@@ -1,0 +1,566 @@
+System Design Concept: 
+
+System Design is the process of planning and designing how a software application or system will work internally, how its different components will communicate, and how it will handle users, data, and increasing traffic.
+
+HLD: 
+
+Stands for High-Level Design, defines how will the overall system be structured. 
+
+If we are building an application then there are basic questions which are to be kept in mind like: 
+
+Will we use a monolithic or microservices architecture?
+Which database will we use?
+How will users communicate with our backend?
+How will we store and deliver videos?
+Will we need a load balancer?
+How will we handle millions of users?
+
+
+LLD: 
+
+Now inside the system how the individual component going to be implemented. 
+
+What classes will we create?
+What functions will each class contain?
+What will be the relationships between classes?
+What interfaces should we define?
+What design patterns should we use?
+How will we structure the code?
+
+
+Functional Requirements: 
+
+These are the features and functionalities which an user expects from the system or the software.
+
+Let's take YouTube as an example.
+
+What should a user be able to do?
+- Register an account.
+- Log in.
+- Search for videos.
+- Play and pause videos.
+- Like and comment on videos.
+- Subscribe to channels.
+- Upload videos.
+
+
+Non-Functional Requirements: 
+
+Non-functional requirements define how well a system should work. 
+
+Scalability: The system should support millions of users.
+Availability: The application should remain accessible with minimal downtime.
+Performance: Videos and search results should load quickly.
+Security: User passwords and personal information must be protected.
+Reliability: The system should operate correctly even when some components fail.
+Maintainability: Developers should be able to modify and extend the system easily.
+
+
+Also as we know that non functional requirement is about making system fast and secure but in real world we can't just say to make system fast we have to play with figure.  
+
+For example:
+
+Vague requirement	        Measurable requirement
+Application should be fast	95% of API requests should respond within 200 ms
+Application should be available	99.99% availability
+System should handle traffic	Support 100,000 concurrent connections
+Search should be quick	        95% of searches complete within 300 ms
+
+
+
+Now we can't just bring any amount of resources as we want there are constraints which we have to abide by.
+
+
+System Constraints: 
+
+System constraints are the limitations, restrictions, or conditions that influence how we design and build a system.
+
+
+
+Common System Constraints are: 
+
+1. Technical Constraints
+2. Budget Constraints
+3. Time Constraints
+4. Infrastructure Constraints
+5. Regulatory and Compliance Constraints
+6. Business Constraints
+
+
+
+
+Now some of the major non functional requirements are that wee have to make sure that the system is scalable, reliable, available and maintainable. 
+
+
+
+
+Fault Tolerance: 
+
+Fault Tolerance is the ability of a system to continue operating even when one or more of its components fail. 
+
+If due to one problem that features becomes unavailable then our system has a single point of failure which shouldn't be the case. 
+
+In order to fix that there are various methods: 
+
+but before that let's understand some terminology: 
+
+| Term | Meaning | Example |
+|--------|--------|--------|
+| Fault | The underlying cause of a problem | RAM becomes defective |
+| Error | An incorrect internal state | Data gets corrupted in memory |
+| Failure | The system fails to provide its expected service | Application crashes |
+
+
+To make your system fault tolerant these are the methods: 
+
+A) Redundancy: 
+
+Having additional resource so that if one fails, other can take over. 
+
+For example, having two servers so that if one fails other can take over. 
+
+Server A => Primary
+Server B => Backup   
+
+
+B) Replication: 
+
+It means maintaining multiple copies of data across different servers. 
+
+If primary database crashes then a replica can be send to the primary database. 
+
+C) Failover: 
+
+Process of switching operations from a failed component to a healthy backup component. 
+
+
+Performance: 
+
+We already have discussed it a thousand times no need of. 
+
+
+
+
+
+
+1. Client Server Architecture: 
+
+
+It is about two entities communicating with each other. 
+
+Client: The entity that request a service or data. 
+Server: The entity that receives the request, process it and sends back a response. 
+
+We have to take care about server failure, network dependency, server overload and latency. 
+
+
+Now there are various types of client server architecture: 
+
+
+i) 2-tier architecture: 
+
+There are two tiers: 
+
+1. Client tier
+2. Database tier
+
+Direct communication with the database but the problem is that it is not secured as the client is directly accessing the database plus if the traffic increases then scaling is the problem. So, securing and scaling both are a tradeoff and hence is not used that much. 
+
+ii) 3-tier architecture: 
+
+Between the client and database an application server is introduced, which can scale, perform operations with the database, authenticates the database to ensure that the request can fetch result from the database more easily. 
+
+Performing operations means that: 
+
+Think of it this way: The database knows the student's marks. The Application Server knows what those marks mean according to the college's rules.
+
+
+iii) N-tier architecture: 
+
+But before moving to N-tier architecture some of the things should be kept in mind
+
+First thing is that what is a layered architecture: 
+
+Application is divided into multiple logical layers, where each layer has a specific responsibility. 
+
+It is about how are you organizing responsibilities inside software like we create different folders in the same deployment like controllers, routes, utils etc. all have different purposes, now this is the layered architecture. 
+
+But now N-tier architecture is different, 
+
+Now in this all roles play in different deployment tier what happens in this is that if there is a database then API gateway, application all these layers will be in different tiers. 
+
+Now one might think the reason if layered also does the same, why add them in different deployment tiers or servers. 
+
+Now each server has its own resources.
+
+If your database needs more memory, you can upgrade the database server without upgrading your frontend server.
+
+If backend traffic increases, you can add more backend instances.
+
+That is the real benefit. 
+
+
+But don't always use this because it costs high and it has more infrastructure to manage. 
+
+Also these N-tiers architecture could also have layered architecture inside them. 
+
+Let's say application layer has its own layer wise folder distribution. 
+
+
+Okay now what is monolithic: 
+
+In monolithic architecture, the entire application is developed and deployed as one unified application, like you can say a layered architecture.
+
+Microservices: Can be considered as a N-tier architecture as in that there are multiple deployment unit unlike monolithic with only one deployment unit. 
+
+Distributed Architecture: 
+
+Distributed Architecture is a software architecture in which different components of an application run on multiple interconnected computers (nodes) and communicate over a network to accomplish a common task.
+
+
+Let's say your application becomes extremely popular.
+
+You have 10 lakh users accessing it simultaneously.
+
+If everything runs on one computer, you may face:
+1. CPU overload.
+2. Memory limitations.
+3. Database bottlenecks.
+4. Single point of failure.
+5. Difficulty handling increasing traffic.
+Distributed architecture helps address these problems.
+
+Request Response Lifecycle: 
+
+The entire lifecycle in which a client sends the request, server gets the request then server sends the response and then the client gets the response is request response lifecycle. 
+
+
+
+System Design Building Blocks: 
+
+
+
+1. Web Servers :-
+
+First what is a server, 
+
+It is a computer or software program that provides resources, data or services to other computer or programs(clients). 
+
+There are basically various type of servers: 
+
+Web Servers: Receives HTTP/HTTPS request and servers web content or forward requests to application servers.
+
+Application Servers: Executes business logic, processes requests and communicates with databases or other services.
+
+Similarly there are other servers like Database server, DNS server, Proxy Server, File Server or Mail Server.
+
+
+Now coming back to Web Server: 
+
+It receives HTTP requests from clients and sends HTTP responses back to them. 
+
+What happens?
+1. You enter the URL in your browser.
+2. The browser sends an HTTP request.
+3. The web server receives that request.
+4. The server processes the request or forwards it to the application.
+5. The server sends back an HTTP response.
+6. Your browser renders the website
+
+Web Server is both hardware and software. 
+
+There are physical or virtual machine that provides computing resources such as: 
+
+1. CPU
+2. RAM
+3. Storage
+4. Network Connectivity
+
+
+
+
+
+
+Proxies: 
+
+
+
+A Proxy is an intermediary that acts on behalf of another party when communicating with a third party. 
+
+
+In simple words:
+
+Instead of A communicating directly with B, A communicates with C, and C communicates with B on A's behalf.
+
+Here, C is the Proxy.
+
+
+Now what are the advantages of using a Proxy: 
+
+
+1. Hide your original IP address: 
+
+Your IP: 103.25.10.20
+Proxy IP: 45.80.20.10
+
+So, the website checks the proxy IP instead of your original IP address. 
+
+Now it can be the case that a US based website is restricting Indian IP but now using proxy you might be able to change your IP to access it. 
+
+2. Improve Performance through caching: 
+
+Suppose 100 employees in a company visit the same website and download the same image.
+
+Without caching:
+- All 100 requests go to the original website.
+- The same image gets downloaded 100 times.
+With a caching proxy:
+- The first request fetches the image from the original server.
+- The proxy stores a copy.
+- The next 99 requests can receive the cached image.
+
+
+Advantages:
+- Reduced network bandwidth.
+- Faster responses for cached content.
+- Reduced load on the destination server.
+
+
+3. Access control and monitoring: 
+
+Imagine a college has 4,000 students.
+
+The college can configure a proxy server through which all student internet traffic passes.
+
+The administrator can:
+- Block certain websites.
+- Restrict access to particular domains.
+- Monitor network traffic.
+- Apply internet usage policies.
+
+4. Load Balancing: 
+
+This is particularly important in backend development.
+
+Suppose your application has three Node.js servers:
+- Server 1: 192.168.1.10
+- Server 2: 192.168.1.11
+- Server 3: 192.168.1.12
+
+
+
+Somethings to keep in mind before moving forward is that: 
+
+There is a difference between a VPN and a proxy; 
+
+Proxy is used for that specific website only and only that website can be accessed where as VPN is used to stream the entire flow through the tunnel so for all the website VPN can be used and it generally provides stronger security. 
+
+Also if you think how does a proxy changes your IP address then what it does is that it only gives you the Proxy IP.
+
+Now there are two types of Proxies: 
+
+1. Forward Proxy: 
+
+A Forward Proxy is a server that sits between a client and the internet, forwarding the client's requests to destination servers on the client's behalf. 
+
+Now what is the point of using forward Proxy: 
+
+
+Purpose	        Explanation
+IP masking	Destination websites generally see the proxy's IP
+Access control	Administrators can block specific websites
+Authentication	Require users to authenticate before accessing the internet
+Caching	Store   frequently requested resources
+Monitoring	Monitor outgoing internet requests
+Security	Filter malicious destinations and requests
+
+
+Mostly in college's laptop some websites are banned and they used forward proxy if the proxy checks that the website is banned then it does not send the request further.
+
+
+Request goes to proxy and then proxy checks if the website is banned or not if it is banned, the request doesn't move further. 
+
+
+2. Reverse Proxy: 
+
+It is a server that sits between clients and backend servers, receiving client's request and forwarding them to the appropriate servers. 
+
+Request Per Second(RPS)
+
+It is the number of requests a server receives or processes in one second. 
+
+RPS = Total Requests/Total Seconds
+
+Now there are two concepts Average RPS and Peak RPS: 
+
+Average RPS: Average requests received per second.
+Peak RPS: Maximum requests received per second during a particular period.
+
+
+
+Queries Per Seconds(QPS)
+
+It is the number of queries which a system processes in one second. 
+
+Now there are difference between RPS and QPS
+
+
+If the application receives 100 API requests per seconds and each API make 3 data base queries then in that case QPS will be 300.
+
+
+Now even in this we have to often understand the bottleneck like suppose that server can easily handle 1500 request per second but each is making 3 queries and database can handle 3000 QPS then it is a database bottleneck, increasing the server won't help here. 
+
+
+Now in order to fix that bottleneck we have to fix the number of queries which is being received on to the server or to that deployment unit.
+
+Some of the common methods are: 
+
+1. Caching: 
+
+Store frequently requested data in Redis. 
+
+2. Database Indexing 
+
+An index helps PostgreSQL find records faster without scanning the entire table in many cases.
+
+3. Query Optimization: 
+
+Instead of executing 3 separate queries when one properly designed query can retrieve the required data, optimize your database access.
+
+4. Connection Pooling: 
+
+Reuse existing database connections rather than creating a new connection for every query.
+
+
+
+Concurrent Users: 
+
+
+Concurrent users are the number of users who are actively using your application during the same period.
+
+
+Now it is not like that if there are 1000 concurrent users then there will be 1000 RPS. It can be that majority of them are just hovering over the website. 
+
+But it doesn't necessarily mean that we can have as much as concurrent users as we want, 
+
+Bandwidth Estimation: 
+
+It is the maximum amount of data which can be transferred over a network per unit of time.
+
+Now the formula for bandwidth = RPS * Avg. Response Size
+
+Now the bandwidth size should be that much or else the network capacity will be a bottleneck. 
+
+
+Now there are two more concepts which are 
+
+1. Upload Bandwidth: 
+
+Data travelling from user's device to your server. 
+
+2. Download Bandwidth:
+
+Data travelling from server to user's device. 
+
+So, these are inbound and outbound network capacities we have to calculate them separately. 
+
+Assume:
+- 10,000 concurrent users.
+- Each user generates one API request every 5 seconds.
+- Each API response is 200 KB.
+- Each API request generates 3 database queries.
+Let's calculate:
+
+RPS = 2000 req/sec
+Bandwidth size required = 2,000 * 200 KB = 400 MB/s or 3200 Megabits per seconds
+QPS = 2000 *3 = 6000
+
+Storage Estimation: 
+
+Storage Estimation is the process of calculating how much disk space your application will required to store its data over a particular period. 
+
+1. Database Storage
+
+This is used to store structured application data. 
+
+Example: 
+
+User Details, Orders, Comments, Transactions
+
+
+Technologies: PostgreSQL, MySQL, MongoDB.
+
+
+2. Object/File Storage
+
+Stores large files and media. 
+
+Example: 
+
+Profile Picture, PDFs, Videos and Documents
+
+Technologies: Amazon S3, Google Cloud Storage, MinIO.
+
+3. Cache Storage
+
+Stores frequently accessed data temporarily for faster retrieval. 
+
+User sessions, frequently accessed products and regular posts.
+
+Technology: Redis
+
+Now obviously object images and videos occupy more space and hence they are stored in separate storage and also we have to add the size of indexing and replication of database and stuff. 
+
+
+
+Read to Write Ratio: 
+
+Read-to-Write Ratio tells us how frequently data is read compared to how frequently data is written.
+
+Now what is the reason of understanding the read to write ratio while designing a system, the major reason is that; 
+
+There is a difference in database design of the system which is read heavy and the system which is write heavy. 
+
+
+In a ready heavy database we use caching so that most of the queries can be fetched easily from the cache. If the cache hits then it is fine and all the cache miss only those have to go to the database and for write heavy operations we have to create a database which can handle all those queries.
+
+
+
+Latency Estimation: 
+
+
+Latency is the time take for data or a request to travel from its source to its destination. 
+
+Now there are many things which are to be added while calculating latency such as: 
+
+Network request to server, Backend processing, Database query, Network response, Other overhead all are calculated in total time at the point of calculating latency. 
+
+
+Also there is a difference between latency and throughput.
+
+Latency => How long does one request takes, we have to reduce the latency
+
+Throughput => How much work can a system complete per unit of time, we have to increase the throughput. 
+
+
+Mostly we look at P95 and P99 that is if P99 is 100ms that means, Out of 100 requests, the average latency of 99 requests is 100ms. 
+
+
+Capacity Planning: 
+
+
+Capacity Planning is the process of estimating and arranging the resources required to run an application efficiently under its expected workload.
+
+Now how to calculate capacity planning: 
+
+We know how to calculate RPS, QPS, Storage, Bandwidth then on basis of this we will see how many servers can handle it. 
+
+Back of the Envelope => Calculating how much resource is it needed like an estimate before handling the real world cases. 
+
+
+
+
+
+
+
+
